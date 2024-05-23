@@ -1,0 +1,606 @@
+package Sorting;
+
+import java.io.*;
+
+public class SortTiming {
+//Dorian Collins, Finished May 23, 2024 (thank you for the extension :( got to held up on a simple mistake and fell behind)
+
+	public static void main(String[] args) throws IOException
+
+	{
+
+		BufferedReader keybd = new BufferedReader(new InputStreamReader(System.in));
+
+		// INITIALIZE numbers !!!!
+		int[] nums2 = new int[50000]; // QS
+
+		int[] nums3 = new int[nums2.length]; // IS
+
+		int[] nums4 = new int[nums2.length]; // BS
+
+		int[] nums5 = new int[nums2.length]; // BACKWARDS IS
+
+		// simple low high values
+		int low = -100000;
+
+		int high = 100000;
+
+		// simply fills in the nums2 with random numbers and then sets all the other
+		// arrays TO that original array to create copies
+		for (int i = 0; i < nums2.length; i++) {
+
+			int nums = (int) (Math.random() * (high - low) + low);
+
+			nums2[i] = nums;
+
+			nums3[i] = nums;
+
+			nums4[i] = nums;
+
+			nums5[i] = nums;
+
+		}
+
+//
+
+// Insertion sort regular array
+
+		long startTime = System.currentTimeMillis();
+
+		InsertionSort(nums2);
+
+		long endTime = System.currentTimeMillis();
+
+		System.out.println("Insertion Sort took: " + (endTime - startTime) + " ms"); // INSERTION SORT
+
+//________________________________________________________________________
+		long startTime4 = System.currentTimeMillis();
+
+		InsertionSortBackwards(nums2);
+
+		long endTime4 = System.currentTimeMillis();
+
+		// displayArray(nums2);
+
+		System.out.println("Backwards Insertion Sort took: " + (endTime - startTime) + " ms"); // BACKWARDS INSERTION
+																								// SORT
+
+//________________________________________________________________________
+
+		long startTime2 = System.currentTimeMillis();
+
+		bubbleSort(nums3);
+
+		long endTime2 = System.currentTimeMillis();
+
+		System.out.println("Bubble Sort took: " + (endTime2 - startTime2) + " ms"); // BUBBLE SORT
+//________________________________________________________________________
+
+		long startTime5 = System.currentTimeMillis();
+
+		bubbleSortBackwards(nums3);
+
+		long endTime5 = System.currentTimeMillis();
+
+		System.out.println("Backwards Bubble Sort took: " + (endTime5 - startTime5) + " ms"); // BACKWARDS BUBBLE SORT
+//________________________________________________________________________
+
+		long startTime3 = System.currentTimeMillis();
+
+		quickSort(nums4);
+
+		long endTime3 = System.currentTimeMillis();
+
+		System.out.println("Quick Sort took: " + (endTime3 - startTime3) + " ms"); // QUICK SORT
+//________________________________________________________________________
+
+		long startTime6 = System.currentTimeMillis();
+
+		quickSortBackwards(nums4);
+
+		long endTime6 = System.currentTimeMillis();
+
+		System.out.println("Backwards Quick Sort took: " + (endTime6 - startTime6) + " ms"); // BACKWARDS QUICK SORT
+//________________________________________________________________________
+
+//redo backward sorts to see how fast it actually goes without adjusting values
+
+		long startTime7 = System.currentTimeMillis();
+
+		InsertionSortBackwards(nums2);
+
+		long endTime7 = System.currentTimeMillis();
+
+		// displayArray(nums2);
+
+		System.out.println("Backwards Insertion Sort took: " + (endTime - startTime) + " ms");
+
+//________________________________________________________________________	
+		long startTime8 = System.currentTimeMillis();
+
+		bubbleSortBackwards(nums3);
+
+		long endTime8 = System.currentTimeMillis();
+
+		System.out.println("Backwards Bubble Sort took: " + (endTime5 - startTime5) + " ms");
+
+//________________________________________________________________________	
+		System.out.println("Backwards Quick Sort took: " + (endTime6 - startTime6) + " ms");
+
+		// redo it to see how fast
+
+		long startTime9 = System.currentTimeMillis();
+
+		InsertionSortBackwards(nums2);
+
+		long endTime9 = System.currentTimeMillis();
+
+//________________________________________________________________________
+
+		// initializing temp values and setting the first number of the array to the
+		// last number of the array (swapping)
+
+		int temps;
+
+		// so temp is first num
+		temps = nums2[0];
+		// first num becomes last num
+		nums2[0] = nums2[nums2.length - 1];
+		// last num becomes the first num from the temp value !!!!
+		nums2[nums2.length - 1] = temps;
+
+		// rinse repeat
+		temps = nums3[0];
+
+		nums3[0] = nums3[nums3.length - 1];
+
+		nums3[nums3.length - 1] = temps;
+
+		// rinse and repeat..
+		temps = nums4[0];
+
+		nums4[0] = nums4[nums4.length - 1];
+
+		nums4[nums4.length - 1] = temps;
+
+//________________________________________________________________________
+	}
+
+//methods
+	public static void InsertionSort(int[] nums2) {
+
+		int temp; // temporary holder for the key element
+
+		for (int indexKey = 1; indexKey < nums2.length; indexKey++)
+
+		{
+
+			if ((nums2[indexKey] < nums2[indexKey - 1]) && (indexKey > 0))
+
+			{
+
+				// Store the element
+
+				temp = nums2[indexKey]; // Current element we are examining
+
+				// Element is out of place so we have to scan
+
+				// the array to find where we belong.
+
+				int rightLoc = indexKey - 1; // rightLoc will keep
+
+				// moving left to find the right location of the element
+
+				while (temp < nums2[rightLoc])
+
+				{
+
+					rightLoc--;
+
+					// temp belongs as the very first element
+
+					if (rightLoc == -1)
+
+						break;
+
+				} // end while loop
+
+				rightLoc++; // This is the right spot for the element to go
+
+				// Now call on the method with the right info for the arguments.
+
+				shift(nums2, rightLoc, indexKey);
+
+			} // end if
+
+		} // End for loop
+
+	} // end of insertion sort method
+
+	public static void InsertionSortBackwards(int[] nums2) {
+
+		int temp; // temporary holder for the key element
+
+		for (int indexKey = 1; indexKey < nums2.length; indexKey++)
+
+		{
+
+// to see if it is out of order.
+
+//Check if current element is out of order.
+
+//we know this if the element to it's left is
+
+//bigger (ASCENDING ORDER)
+
+			if ((nums2[indexKey] > nums2[indexKey - 1]) && (indexKey > 0))
+
+			{
+
+				// Store the element
+
+				temp = nums2[indexKey]; // Current element we are examining
+
+				// Element is out of place so we have to scan
+
+				// the array to find where we belong.
+
+				int rightLoc = indexKey - 1; // rightLoc will keep
+
+				// moving left to find the right location of the element
+
+				while (temp > nums2[rightLoc])
+
+				{
+
+					rightLoc--;
+
+					// temp belongs as the very first element
+
+					if (rightLoc == -1)
+
+						break;
+
+				} // end while loop
+
+				rightLoc++; // This is the right spot for the element to go
+
+				// Now call on the method with the right info for the arguments.
+
+				shift(nums2, rightLoc, indexKey);
+
+			} // end if
+
+		} // End for loop
+
+	} // end of insertion sort method
+
+	public static void shift(int[] list, int newIndex, int oldIndex)
+
+	{
+
+		int temp = list[oldIndex]; // Creating a temporary variable.
+
+		for (int x = oldIndex; x > newIndex; x--)
+
+		{
+
+			list[x] = list[x - 1]; // Move each element over
+
+		} // end For loop
+
+		list[newIndex] = temp; // Putting the temp into the correct spot.
+
+	} // Shift ()
+
+//*****************************************************
+
+// Start the clock
+
+	public static void bubbleSort(int[] nums3)
+
+	{
+
+		int temp2;
+
+		int index;
+
+		boolean swap;
+
+		do
+
+		{
+
+			swap = false;
+
+			for (index = 0; index < nums3.length - 1; index++)
+
+			{
+
+				if (nums3[index] > nums3[index + 1])
+
+				{
+
+					temp2 = nums3[index];
+
+					nums3[index] = nums3[index + 1];
+
+					nums3[index + 1] = temp2;
+
+					swap = true;
+
+				}
+
+			}
+
+		}
+
+		while (swap == true);
+
+	}
+
+	public static void bubbleSortBackwards(int[] nums3)
+
+	{
+
+		int temp2;
+
+		int index;
+
+		boolean swap;
+
+		do
+
+		{
+
+			swap = false;
+
+			for (index = 0; index < nums3.length - 1; index++)
+
+			{
+
+				if (nums3[index] < nums3[index + 1])
+
+				{
+
+					temp2 = nums3[index];
+
+					nums3[index] = nums3[index + 1];
+
+					nums3[index + 1] = temp2;
+
+					swap = true;
+
+				}
+
+			}
+
+		}
+
+		while (swap == true);
+
+	}
+
+//CANT BOTHER TO KEEP TABBING THESE METHODS OUT MY COMPUTER KEEPS RESETTING THEM BACK TO THE LEFT AND FLATTENING IT :(((
+//IVE COMMENTED ENOUGH 
+	public static void quickSort(int arr[])
+
+	{
+
+		int lowIndex = 0;
+
+		int highIndex = arr.length - 1;
+
+//Perform secondary call, sending info that quickSort needs
+
+		quickSort(arr, lowIndex, highIndex);
+
+	}
+
+	public static void quickSort(int arr[], int lowIndex, int highIndex)
+
+	{
+
+//Establish far left and far right indices in the portion of the array that
+
+//we are dealing with
+
+		int leftPointer = lowIndex;
+
+		int rightPointer = highIndex;
+
+//Select the pivot or partition element
+
+//In this case we pick the element located midway between the lowIndex and highIndex
+
+		int pivotIndex = (int) (lowIndex + highIndex) / 2;
+
+		int pivotValue = arr[pivotIndex]; // ******** THE ACTUAL PIVOT ELEMENT
+
+		do
+
+		{
+
+//Keep the left pointer moving inward until we have an element
+
+//that is not on the correct side of the pivot element
+
+			while (arr[leftPointer] < pivotValue)
+
+				leftPointer++;
+
+//Keep the right pointer moving inward until we have an element
+
+//that is not on the correct side of the pivot element
+
+			while (arr[rightPointer] > pivotValue)
+
+				rightPointer--;
+
+//Make sure the left pointer did not cross over the right pointer
+
+//If all is fine, swap the element at the left pointer with the element
+
+//on the right pointer
+
+			if (leftPointer <= rightPointer)
+
+			{
+
+//Swap elements
+
+				int temp = arr[leftPointer];
+
+				arr[leftPointer] = arr[rightPointer];
+
+				arr[rightPointer] = temp;
+
+//Move pointers inward
+
+				leftPointer++;
+
+				rightPointer--;
+
+			}
+
+		}
+
+		while (leftPointer < rightPointer); // Keep moving pointers as long as they don't cross over
+
+// **** At this point, the pivot is in the right location!
+
+//RECURSIVE CALL
+
+//Call quickSort again sending the left partition
+
+		if (lowIndex < rightPointer)
+
+			quickSort(arr, lowIndex, rightPointer);
+
+//Call quickSort again sending the left partition
+
+		if (leftPointer < highIndex)
+
+			quickSort(arr, leftPointer, highIndex);
+
+	}
+
+	public static void displayArray(int arrayVal[])
+
+	{
+
+		for (int x = 0; x <= arrayVal.length - 1; x++)
+
+		{
+
+			System.out.println("Element " + x + ": " + arrayVal[x]);
+
+		}
+
+		System.out.println("\n\n");
+
+	}
+
+	public static void quickSortBackwards(int arr[])
+
+	{
+
+		int lowIndex = 0;
+
+		int highIndex = arr.length - 1;
+
+//Perform secondary call, sending info that quickSort needs
+
+		quickSortBackwards(arr, lowIndex, highIndex);
+
+	}
+
+	public static void quickSortBackwards(int arr[], int lowIndex, int highIndex)
+
+	{
+
+//Establish far left and far right indices in the portion of the array that
+
+//we are dealing with
+
+		int leftPointer = lowIndex;
+
+		int rightPointer = highIndex;
+
+//Select the pivot or partition element
+
+//In this case we pick the element located midway between the lowIndex and highIndex
+
+		int pivotIndex = (int) (lowIndex + highIndex) / 2;
+
+		int pivotValue = arr[pivotIndex]; // ******** THE ACTUAL PIVOT ELEMENT
+
+		do
+
+		{
+
+//Keep the left pointer moving inward until we have an element
+
+//that is not on the correct side of the pivot element
+
+			while (arr[leftPointer] > pivotValue)
+
+				leftPointer++;
+
+//Keep the right pointer moving inward until we have an element
+
+//that is not on the correct side of the pivot element
+
+			while (arr[rightPointer] < pivotValue)
+
+				rightPointer--;
+
+//Make sure the left pointer did not cross over the right pointer
+
+//If all is fine, swap the element at the left pointer with the element
+
+//on the right pointer
+
+			if (leftPointer <= rightPointer)
+
+			{
+
+//Swap elements
+
+				int temp = arr[leftPointer];
+
+				arr[leftPointer] = arr[rightPointer];
+
+				arr[rightPointer] = temp;
+
+//Move pointers inward
+
+				leftPointer++;
+
+				rightPointer--;
+
+			}
+
+		}
+
+		while (leftPointer < rightPointer); // Keep moving pointers as long as they don't cross over
+
+// **** At this point, the pivot is in the right location!
+
+//RECURSIVE CALL
+
+//Call quickSort again sending the left partition
+
+		if (lowIndex < rightPointer)
+
+			quickSortBackwards(arr, lowIndex, rightPointer);
+
+//Call quickSort again sending the left partition
+
+		if (leftPointer < highIndex)
+
+			quickSortBackwards(arr, leftPointer, highIndex);
+
+	}
+
+}
