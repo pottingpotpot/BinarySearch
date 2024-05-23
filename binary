@@ -1,0 +1,93 @@
+package Sorting;
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class BinarySearch {
+	public static void main(String[] args) {
+		// initialize array
+		int[] array = new int[30];
+		// simply increase the amount by 1 each array
+		for (int i = 0; i < array.length; i++) {
+			array[i] = i + 1;
+		}
+
+		// util array class and tostring to make it look nicer than the display method
+		System.out.println("Array is: " + Arrays.toString(array));
+
+		// ask user for a number theyd like to remove out of the array
+		Scanner scanner = new Scanner(System.in);
+		System.out.print("Enter a number to remove: ");
+		int removedNum = scanner.nextInt();
+
+		// use search method and intialize index
+		int index = myBinarySearch(array, removedNum);
+
+		// create a failsafe incase wrong number
+		if (index == -1) {
+			System.out.println("Number not found in the array.");
+		} else {
+
+			// create a simple 2d array traverse shift the numbers over to fill the spot
+			for (int i = index; i < array.length - 1; i++) {
+				array[i] = array[i + 1];
+			}
+			// because of the gap in the array, .length-1 to add a 0 to the empty spot
+			array[array.length - 1] = 0;
+
+			// new array display with .tostring and array class because the display array is
+			// really ugly and makes it long
+			System.out.println("New array: " + Arrays.toString(array));
+
+		}
+	}
+
+	// taken from binary search class!!!!!!!!!!!!!!!!!!!!!!
+	public static int myBinarySearch(int[] array, int key) {
+
+		int middle; // element in physical 'center' of array
+		int lowIndex; // Leftmost index of a subarray
+		int highIndex; // Rightmost index of subarray
+
+		// First time running
+		lowIndex = 0;
+		highIndex = array.length - 1;
+
+		do {
+			// Get the element in the physical 'center'
+			middle = (int) (lowIndex + highIndex) / 2;
+
+			if (key == array[middle]) {
+				// Found it!
+				return middle;
+			} else if (key > array[middle]) // Left side of array does
+			{ // NOT hold the number
+				lowIndex = middle + 1;
+				// key must be on RIGHT side of middle
+			}
+			// Right side of array does NOT hold the number
+			// Key must be on LEFT side
+			else if (key < array[middle]) {
+				highIndex = middle - 1;
+			} // end if
+
+			// With low continually getting higher and
+			// high continually getting lower in value
+			// they eventually 'cross'
+			// Number is not in list then
+			if (lowIndex > highIndex) {
+				return (-1);
+			}
+		} while (true); // INFINITE LOOP!!!
+
+	} // myBinarySearch
+
+	// displayarray that wasnt used ;p only used during testing
+	public static void displayArray(int[] array) {
+		for (int x = 0; x < array.length; x++) {
+			System.out.print(array[x] + "\t");
+		}
+
+		System.out.println("");
+	}
+}
